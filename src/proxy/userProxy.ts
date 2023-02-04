@@ -1,30 +1,38 @@
 import { User } from "../model/user";
-import { Database } from "../infra/database";
+import { Database } from "../db/database";
 import { UsersRepository } from "../repository/repository";
 
 export class UserProxy implements UsersRepository {
 
-    private cache: User[] = []
-    private db = new Database()
+    private cache: User[] = [];
+    private isCached: boolean = false;
+    private db = new Database();
 
     findMany(): User[] {
-        if (this.cache.length === 0) {
-            const users = this.db.findMany()
+        this.validCache()
+        this.logger()
+        if (this.isCached) {
+            return this.cache
+        }       
 
-            this.create(users)
+        const users = this.db.findMany()
 
-            console.log('FROM MYSQL');
+        this.create(users)
 
-            return users
-        }
-
-        console.log('FROM CACHE');
-        
-
-        return this.cache
+        return users
     }
 
     create(data: any) {
         this.cache.concat(data)
+    }
+
+    validCache() {
+        this.isCached = this.cache.length !== 0 ? true : false
+    }
+
+    logger() {
+        let message = this.isCached ? 'FROM CACHE' : 'FROM MYSQL'
+
+        console.log(message);
     }
 }
