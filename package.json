@@ -1,0 +1,12 @@
+{
+  "name": "dp-proxy",
+  "version": "1.0.0",
+  "description": "Estudo sobre o padrão Proxy",
+  "main": "src/main.ts",
+  "scripts": {
+    "dev": "tsx ./src/main.ts"
+  },
+  "keywords": [],
+  "author": "Matheus Moraes",
+  "license": "ISC"
+}
